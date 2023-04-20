@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: DenisKorotchenko
+      changes:
+        sqlFile:
+          dbms: postgresql
+          encoding: utf-8
+          splitStatements: false
+          path: classpath:/database/1/random_data_proc.sql
+          stripComments: true
+      rollback:
+        sqlFile:
+          dbms: postgresql
+          encoding: utf-8
+          splitStatements: false
+          path: classpath:/database/1/random_data_proc-rollback.sql
+          stripComments: true
+  - changeSet:
+      id: 2
+      author: DenisKorotchenko
+      changes:
+        - createTable:
+            tableName: data
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: uuid
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: txt
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: state
+                  type: bigint
+                  constraints:
+                    nullable: false

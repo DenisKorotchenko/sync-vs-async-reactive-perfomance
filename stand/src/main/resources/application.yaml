@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: test-stand
+  datasource:
+    url: jdbc:tc:postgresql:11:///test
+    driver-class-name: org.postgresql.Driver #org.testcontainers.jdbc.ContainerDatabaseDriver
+    username: test
+    password: test
+  #jpa:
+  #  generate-ddl: true
+  #  hibernate:
+  #    ddl-auto: create-drop
+  liquibase:
+    change-log: classpath:/database/changelog.yaml
+
+server:
+  port: 8080
+  servlet:
+    context-path: /${spring.application.name}
+  error:
+    include-stacktrace: always
+    include-message: always
+  tomcat:
+    threads:
+      max: 5
+      min-spare: 5
+    accept-count: 50
+    processor-cache: 5
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'info, health, prometheus'#metrics, prometheus, heapdump, scheduledtasks, logfile, loggers, mappings'
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
