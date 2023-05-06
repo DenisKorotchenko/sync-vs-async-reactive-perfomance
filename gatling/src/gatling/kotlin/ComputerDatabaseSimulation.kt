@@ -16,7 +16,7 @@ class ComputerDatabaseSimulation : Simulation() {
       //.feed(feeder)
       .*/exec(
         http("Find")
-          .get("/0/50/50")
+          .get("difference/0/50/50")
           .requestTimeout(Duration.ofSeconds(3))
 //          .check(
 //            css("a:contains('#{searchComputerName}')", "href").saveAs("computerUrl")
@@ -79,7 +79,7 @@ class ComputerDatabaseSimulation : Simulation() {
 
   init {
     setUp(
-      users.injectOpen(rampUsers(60 * 100).during(60)),
+      users.injectOpen(rampUsers(60 * 5 * 100).during(60 * 5)),
     ).protocols(httpProtocol)
   }
 }

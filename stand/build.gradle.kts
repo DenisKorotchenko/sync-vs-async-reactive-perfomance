@@ -14,6 +14,7 @@ java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
 	mavenCentral()
+	maven("https://repo.kotlin.link")
 }
 
 dependencies {
@@ -21,10 +22,12 @@ dependencies {
 
 	//implementation(platform("org.testcontainers:testcontainers-bom:1.17.3"))
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("org.springframework.boot:spring-boot-starter-web-services")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 
 	implementation("io.micrometer", "micrometer-registry-prometheus")
+	implementation("com.google.code.gson", "gson", "2.10")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -37,12 +40,15 @@ dependencies {
 
 	implementation("org.springframework.boot", "spring-boot-starter-data-jpa")
 	implementation("org.postgresql", "postgresql")
-	implementation("org.testcontainers", "postgresql", "1.17.3")
+	implementation("org.testcontainers", "postgresql", "1.17.6")
 	implementation("org.liquibase", "liquibase-core")
 
-	implementation("org.testcontainers", "testcontainers", "1.17.3")
+	implementation("org.testcontainers", "testcontainers", "1.17.6")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+	implementation("space.kscience:kmath-core:0.3.1-dev-RC")
+	implementation("space.kscience:kmath-stat:0.3.1-dev-RC")
 }
 
 tasks {
@@ -60,7 +66,6 @@ tasks {
 		dependsOn(copyDockerfile)
 	}
 }
-
 
 
 tasks.withType<KotlinCompile> {

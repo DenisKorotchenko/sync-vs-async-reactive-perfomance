@@ -10,15 +10,15 @@ import javax.persistence.Id
 open class DataEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    var id: Long? = null,
+    open var id: Long? = null,
 
     @Column(name = "uuid")
-    var uuid: String,
+    open var uuid: String,
 
     @Column(name = "txt")
-    var txt: String,
+    open var txt: String,
 
     @Column(name = "state")
-    var state: Long,
+    open var state: Long,
 )
 

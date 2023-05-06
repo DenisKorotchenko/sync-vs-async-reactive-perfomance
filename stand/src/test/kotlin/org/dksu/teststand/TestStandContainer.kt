@@ -9,14 +9,17 @@ class TestStandContainer() : GenericContainer<TestStandContainer>("teststand") {
     init {
         withNetwork(myNetwork)
         withNetworkAliases("teststand")
-        withExposedPorts(8080)
+        withExposedPorts(8080, 8081)
         //withEnv("TESTCONTAINERS_RYUK_DISABLED", "true")
         withFileSystemBind(
             "//var/run/docker.sock",
             "/var/run/docker.sock",
             BindMode.READ_WRITE,
         )
-        withLogConsumer(Slf4jLogConsumer(logger()))
+        withCreateContainerCmdModifier { cmd ->
+            cmd.hostConfig?.withMemory(1024 * 1024 * 1024)
+            cmd.hostConfig?.withNanoCPUs(1000_000_000)
+        }
     }
 
     override fun start() {

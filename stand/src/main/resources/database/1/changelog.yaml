@@ -45,3 +45,20 @@ databaseChangeLog:
                   type: bigint
                   constraints:
                     nullable: false
+  - changeSet:
+      id: 3
+      author: DenisKorotchenko
+      changes:
+        sqlFile:
+          dbms: postgresql
+          encoding: utf-8
+          splitStatements: false
+          path: classpath:/database/1/add_random_data.sql
+          stripComments: true
+#      rollback:
+#        sqlFile:
+#          dbms: postgresql
+#          encoding: utf-8
+#          splitStatements: false
+#          path: classpath:/database/1/random_data_proc-rollback.sql
+#          stripComments: true

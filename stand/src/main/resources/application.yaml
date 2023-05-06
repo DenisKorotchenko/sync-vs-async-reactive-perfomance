@@ -3,7 +3,7 @@ spring:
     name: test-stand
   datasource:
     url: jdbc:tc:postgresql:11:///test
-    driver-class-name: org.postgresql.Driver #org.testcontainers.jdbc.ContainerDatabaseDriver
+    #driver-class-name: #org.postgresql.Driver #org.testcontainers.jdbc.ContainerDatabaseDriver
     username: test
     password: test
   #jpa:
@@ -21,13 +21,19 @@ server:
     include-stacktrace: always
     include-message: always
   tomcat:
-    threads:
-      max: 5
-      min-spare: 5
-    accept-count: 50
-    processor-cache: 5
+#    threads:
+#      max: 1 In code!!!
+#      min-spare: 1 In code!!!!
+    accept-count: 100
+    processor-cache: 1
+    max-connections: 100
+
+
 
 management:
+  server:
+    port:
+      8081
   endpoints:
     web:
       exposure:
@@ -37,3 +43,11 @@ management:
       prometheus:
         enabled: true
 
+springdoc:
+  swagger-ui:
+    #config-url: "http://localhost:8080/test-stand/v3/api-docs"
+    url: "http://localhost:8080/test-stand/v3/api-docs"
+
+logging:
+  level:
+    root: info
