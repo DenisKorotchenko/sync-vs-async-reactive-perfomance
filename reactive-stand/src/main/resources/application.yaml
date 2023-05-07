@@ -1,13 +1,13 @@
 spring:
   application:
     name: test-stand
-  datasource:
-    url: jdbc:tc:postgresql:11:///test
-    #driver-class-name: #org.postgresql.Driver #org.testcontainers.jdbc.ContainerDatabaseDriver
-    username: test
-    password: test
+#  datasource:
+#    url: jdbc:tc:postgresql:11:///test
+#    #driver-class-name: #org.postgresql.Driver #org.testcontainers.jdbc.ContainerDatabaseDriver
+#    username: test
+#    password: test
   r2dbc:
-    url: r2dbc:tc:postgresql:11:///test
+    url: r2dbc:postgresql://localhost:5432/test
     username: test
     password: test
   #jpa:
@@ -15,7 +15,10 @@ spring:
   #  hibernate:
   #    ddl-auto: create-drop
   liquibase:
+    url: jdbc:postgresql://localhost:5432/test
+    user: test
     change-log: classpath:/database/changelog.yaml
+    password: test
 
 server:
   port: 8080
@@ -50,7 +53,7 @@ management:
 springdoc:
   swagger-ui:
     #config-url: "http://localhost:8080/test-stand/v3/api-docs"
-    url: "http://localhost:8080/test-stand/v3/api-docs"
+    url: "http://localhost:8080/v3/api-docs"
 
 logging:
   level:

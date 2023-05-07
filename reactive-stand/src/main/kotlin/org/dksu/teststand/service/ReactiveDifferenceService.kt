@@ -1,15 +1,9 @@
 package org.dksu.teststand.service
 
-import io.micrometer.core.annotation.Timed
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.forEach
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.flow.transform
 import org.dksu.teststand.entity.DataEntity
-import org.dksu.teststand.repository.DataRepository
 import org.dksu.teststand.repository.ReactiveDataRepository
 import org.springframework.stereotype.Service
 import kotlin.random.Random
@@ -32,11 +26,11 @@ class ReactiveDifferenceService(
     }
 
     suspend fun sortByTxt(rows: Flow<DataEntity>): List<DataEntity> {
-        val ans = sortedSetOf<DataEntity>()
+        val ans = mutableListOf<DataEntity>()
         rows.collect {
             ans.add(it)
         }
-        return ans.toList()
+        return ans.sortedBy { it.txt }.toMutableList()
     }
 
     suspend fun getDifferenceFromTo(fromState: Long, toState: Long, numberOfCompareRows: Long): Int {

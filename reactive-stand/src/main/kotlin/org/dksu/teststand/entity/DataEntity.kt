@@ -1,24 +1,22 @@
 package org.dksu.teststand.entity
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import org.springframework.data.annotation.Id
+import org.springframework.data.relational.core.mapping.Column
+import org.springframework.data.relational.core.mapping.Table
 
-@Entity(name = "data")
+@Table("data")
 open class DataEntity(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Id //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column("id")
     open var id: Long? = null,
 
-    @Column(name = "uuid")
+    @Column("uuid")
     open var uuid: String,
 
-    @Column(name = "txt")
+    @Column("txt")
     open var txt: String,
 
-    @Column(name = "state")
+    @Column("state")
     open var state: Long,
 )
 

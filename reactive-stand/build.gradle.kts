@@ -18,11 +18,12 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springdoc:springdoc-openapi-ui:1.6.3")
+	//implementation("org.springdoc:springdoc-openapi-ui:1.6.3")
+	val springDocVersion = "1.6.3"
+	implementation("org.springdoc", "springdoc-openapi-webflux-core", springDocVersion)
+	implementation("org.springdoc", "springdoc-openapi-webflux-ui", springDocVersion)
 
 	//implementation(platform("org.testcontainers:testcontainers-bom:1.17.3"))
-	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("org.springframework.boot:spring-boot-starter-web-services")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 
 	implementation("io.micrometer", "micrometer-registry-prometheus")
@@ -37,10 +38,13 @@ dependencies {
 
 	implementation("com.zaxxer", "HikariCP")
 
-	implementation("org.springframework.boot", "spring-boot-starter-data-jpa")
+//	implementation("org.springframework.boot", "spring-boot-starter-data-jpa")
 	implementation("org.postgresql", "postgresql")
+//	implementation("org.postgresql", "r2dbc-postgresql")
 	implementation("org.testcontainers", "postgresql", "1.17.6")
+	implementation("org.testcontainers", "r2dbc", "1.17.6")
 	implementation("org.liquibase", "liquibase-core")
+	runtimeOnly("org.springframework", "spring-jdbc")
 
 	implementation("org.testcontainers", "testcontainers", "1.17.6")
 
@@ -61,14 +65,14 @@ dependencies {
 
 tasks {
 	val copyDockerfile = register<Copy>("copyDockerfile") {
-		from("${rootProject.rootDir}/docker/Dockerfile")
+		from("${rootProject.rootDir}/docker/reactive/Dockerfile")
 		into("$buildDir")
 	}
 
 	register<Exec>("buildDockerImage") {
 		workingDir("$buildDir")
 		executable("docker")
-		args(listOf("build", "-t", "teststand", "."))
+		args(listOf("build", "-t", "reactive-teststand", "."))
 
 		dependsOn(bootJar)
 		dependsOn(copyDockerfile)

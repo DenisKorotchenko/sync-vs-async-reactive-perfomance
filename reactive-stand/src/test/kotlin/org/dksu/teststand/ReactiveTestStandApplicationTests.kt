@@ -2,7 +2,7 @@ package org.dksu.teststand
 
 import org.junit.jupiter.api.Test
 
-internal class TestStandApplicationTests {
+internal class ReactiveTestStandApplicationTests {
 
 	@Test
 	fun contextLoads() {

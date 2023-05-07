@@ -52,14 +52,14 @@ dependencies {
 
 tasks {
 	val copyDockerfile = register<Copy>("copyDockerfile") {
-		from("${rootProject.rootDir}/docker/Dockerfile")
+		from("${rootProject.rootDir}/docker/sync/Dockerfile")
 		into("$buildDir")
 	}
 
 	register<Exec>("buildDockerImage") {
 		workingDir("$buildDir")
 		executable("docker")
-		args(listOf("build", "-t", "teststand", "."))
+		args(listOf("build", "-t", "sync-teststand", "."))
 
 		dependsOn(bootJar)
 		dependsOn(copyDockerfile)

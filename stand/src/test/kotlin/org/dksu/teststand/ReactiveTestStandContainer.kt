@@ -2,13 +2,11 @@ package org.dksu.teststand
 
 import org.testcontainers.containers.BindMode
 import org.testcontainers.containers.GenericContainer
-import org.testcontainers.containers.SelinuxContext
-import org.testcontainers.containers.output.Slf4jLogConsumer
 
-class TestStandContainer() : GenericContainer<TestStandContainer>("teststand") {
+class ReactiveTestStandContainer() : GenericContainer<ReactiveTestStandContainer>("reactive-teststand") {
     init {
         withNetwork(myNetwork)
-        withNetworkAliases("teststand")
+        withNetworkAliases("reactive")
         withExposedPorts(8080, 8081)
         //withEnv("TESTCONTAINERS_RYUK_DISABLED", "true")
         withFileSystemBind(
@@ -27,6 +25,6 @@ class TestStandContainer() : GenericContainer<TestStandContainer>("teststand") {
         println(getSwaggerUrl())
     }
 
-    private fun getSwaggerUrl() =
-        "http://" + host + ":" + getMappedPort(8080) + "/test-stand/swagger-ui/index.html"
+    fun getSwaggerUrl() =
+        "http://" + host + ":" + getMappedPort(8080) + "/webjars/swagger-ui/index.html"
 }

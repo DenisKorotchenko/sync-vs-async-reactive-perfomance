@@ -1,35 +1,36 @@
 package org.dksu.teststand
 
-import com.github.dockerjava.api.DockerClient
-import mu.KLogger
 import mu.KLogging
-import mu.KotlinLogging
-import org.testcontainers.DockerClientFactory
 import org.testcontainers.containers.BindMode
 import org.testcontainers.containers.PostgreSQLContainer
-import org.testcontainers.containers.SelinuxContext
-import org.testcontainers.containers.output.WaitingConsumer
-import org.testcontainers.shaded.com.github.dockerjava.core.DockerClientImpl
-import java.lang.RuntimeException
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse.BodyHandlers
 import java.time.Duration
 import kotlin.concurrent.thread
-import kotlin.math.log
 
 class Runner {
     fun run() {
-        val postgreSQLContainer = PostgreSQLContainer("postgres:11").withNetwork(myNetwork)
-            .withNetworkAliases("db")
+        val syncPostgreSQLContainer = PostgreSQLContainer("postgres:11").withNetwork(myNetwork)
+            .withNetworkAliases("sync-db")
             .withExposedPorts(5432)
-        postgreSQLContainer.start()
+        syncPostgreSQLContainer.start()
+        val reactivePostgreSQLContainer = PostgreSQLContainer("postgres:11").withNetwork(myNetwork)
+            .withNetworkAliases("reactive-db")
+            .withExposedPorts(5432)
+        reactivePostgreSQLContainer.start()
         Thread.sleep(1000 * 10)
-        val testStandContainer = TestStandContainer()
-            .withEnv("SPRING_DATASOURCE_URL", "jdbc:postgresql://db:5432/test")
+        val syncTestStandContainer = SyncTestStandContainer()
+            .withEnv("SPRING_DATASOURCE_URL", "jdbc:postgresql://sync-db:5432/test")
             .withEnv("SPRING_DATASOURCE_DRIVER-CLASS-NAME", "org.postgresql.Driver")
-        testStandContainer.start()
+        syncTestStandContainer.start()
+        val reactiveTestStandContainer = ReactiveTestStandContainer()
+            .withEnv("SPRING_R2DBC_URL", "r2dbc:postgresql://reactive-db:5432/test")
+            .withEnv("SPRING_LIQUIBASE_URL", "jdbc:postgresql://reactive-db:5432/test")
+            //.withEnv("SPRING_LIQUIBASE_ENABLED", "false")
+            //.withEnv("SPRING_DATASOURCE_DRIVER-CLASS-NAME", "org.postgresql.Driver")
+        reactiveTestStandContainer.start()
         val prometheusContainer = PrometheusContainer()
         prometheusContainer.start()
         val grafanaContainer = GrafanaContainer()
@@ -37,7 +38,8 @@ class Runner {
         val uid = grafanaContainer.addPrometheusDataSource()
 
         println()
-        println("Grafana pred: ${grafanaContainer.getUrl()}")
+        println("Sync swagger: ${syncTestStandContainer.getSwaggerUrl()}")
+        println("Reactive swagger: ${reactiveTestStandContainer.getSwaggerUrl()}")
         println()
 
 
@@ -49,16 +51,12 @@ class Runner {
 
         val gatlingContainer = GatlingContainer()
         gatlingContainer.withFileSystemBind("build/reports/", "/home/gradle/project/build/reports/", BindMode.READ_WRITE)
-        gatlingContainer.start()
-        println("Gatling started")
-        gatlingContainer.copyFileFromContainer("/home/gradle/project/build/reports/", "reports/")
+        //gatlingContainer.start()
+//        println("Gatling started")
+        //gatlingContainer.copyFileFromContainer("/home/gradle/project/build/reports/", "reports/")
         Thread.sleep(1000 * 3000)
         
         //gatlingContainer.copyFileFromContainer("/home/gradle/project/build/reports/", "reports/")
-    }
-
-    fun runGatling() {
-
     }
 }
 
