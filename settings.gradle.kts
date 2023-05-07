@@ -7,4 +7,5 @@ pluginManagement {
 rootProject.name = "TestStand"
 
 include("stand")
+include("reactive-stand")
 include("gatling")

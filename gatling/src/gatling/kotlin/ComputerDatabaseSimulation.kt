@@ -1,5 +1,6 @@
 import io.gatling.javaapi.core.CoreDsl.exec
 import io.gatling.javaapi.core.CoreDsl.rampUsers
+import io.gatling.javaapi.core.CoreDsl.rampUsersPerSec
 import io.gatling.javaapi.core.CoreDsl.scenario
 import io.gatling.javaapi.core.Simulation
 import io.gatling.javaapi.http.HttpDsl.http
@@ -16,7 +17,7 @@ class ComputerDatabaseSimulation : Simulation() {
       //.feed(feeder)
       .*/exec(
         http("Find")
-          .get("difference/0/50/50")
+          .get("reactive-difference/0/50/50")
           .requestTimeout(Duration.ofSeconds(3))
 //          .check(
 //            css("a:contains('#{searchComputerName}')", "href").saveAs("computerUrl")
@@ -79,7 +80,8 @@ class ComputerDatabaseSimulation : Simulation() {
 
   init {
     setUp(
-      users.injectOpen(rampUsers(60 * 5 * 100).during(60 * 5)),
+      users.injectOpen(rampUsersPerSec(3.0).to(10.0).during(60 * 14))
+      //users.injectOpen(rampUsers(60 * 2 * 22).during(60 * 2)),
     ).protocols(httpProtocol)
   }
 }

@@ -7,7 +7,7 @@ import org.dksu.teststand.repository.DataRepository
 import org.springframework.stereotype.Service
 import kotlin.random.Random
 
-@Service
+//@Service
 class DifferenceService(
     private val dataRepository: DataRepository,
     private val externalServiceEmulator: ExternalServiceEmulator,

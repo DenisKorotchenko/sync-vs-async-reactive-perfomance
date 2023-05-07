@@ -48,6 +48,15 @@ dependencies {
 
 	implementation("space.kscience:kmath-core:0.3.1-dev-RC")
 	implementation("space.kscience:kmath-stat:0.3.1-dev-RC")
+
+	implementation("org.springframework.boot:spring-boot-starter-webflux")
+	implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core")
+	implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-reactor")
+	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
+	implementation("io.r2dbc", "r2dbc-spi", "1.0.0.RELEASE")
+	implementation("io.r2dbc", "r2dbc-postgresql", "0.8.13.RELEASE")
+
+
 }
 
 tasks {
