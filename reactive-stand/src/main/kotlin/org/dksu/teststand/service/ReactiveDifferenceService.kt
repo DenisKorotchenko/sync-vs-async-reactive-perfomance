@@ -33,14 +33,18 @@ class ReactiveDifferenceService(
         return ans.sortedBy { it.txt }.toMutableList()
     }
 
+    suspend fun sortByTxt(rows: List<DataEntity>): List<DataEntity> {
+        return rows.sortedBy { it.txt }.toMutableList()
+    }
+
     suspend fun getDifferenceFromTo(fromState: Long, toState: Long, numberOfCompareRows: Long): Int {
         val d = Random.nextInt(50)
-        val betweenRows = meterRegistry.timer("db").recordCallable {
+        val betweenRows = //meterRegistry.timer("db").recordCallable {
             dataRepository.findAllByStateBetween(fromState + d, toState + d)
-        }
+        //}
 
 //        val ans = meterRegistry.timer("logic").recordCallable {
-            val ans = sortByTxt(betweenRows!!)
+        val ans = sortByTxt(betweenRows)
 //            val rows = mutableSetOf<Long>()
 //            val randomRows = mutableListOf<DataEntity>()
 //            for (i in 0 until numberOfCompareRows) {

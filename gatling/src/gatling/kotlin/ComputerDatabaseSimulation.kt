@@ -8,24 +8,36 @@ import java.time.Duration
 
 class ComputerDatabaseSimulation : Simulation() {
 
-  val example =
-    /*exec(
-      http("Add")
-        .post("/data/add/10")
-    )
-      .pause(1)
-      //.feed(feeder)
-      .*/exec(
-        http("Find")
-          .get("reactive-difference/0/50/50")
-          .requestTimeout(Duration.ofSeconds(3))
+    val sync =
+        exec(
+            http("Sync")
+                .get("difference/0/50/50")
+                .requestTimeout(Duration.ofSeconds(3))
+        )
+    val reactive =
+        /*exec(
+          http("Add")
+            .post("/data/add/10")
+        )
+          .pause(1)
+          //.feed(feeder)
+          .*/exec(
+        http("Reactive")
+            .get("reactive-difference/0/50/50")
+            .requestTimeout(Duration.ofSeconds(3))
+
 //          .check(
 //            css("a:contains('#{searchComputerName}')", "href").saveAs("computerUrl")
 //          )
-      )
-      //.pause(1)
+    )
 
-  // repeat is a loop resolved at RUNTIME
+    val sync1 =
+        exec(http("Sync GetRandom")
+            .get("data/getRandom")
+            .requestTimeout(Duration.ofSeconds(3)))
+    //.pause(1)
+
+    // repeat is a loop resolved at RUNTIME
 //  val browse =
 //    // Note how we force the counter name, so we can reuse it
 //    CoreDsl.repeat(4, "i").on(
@@ -34,9 +46,9 @@ class ComputerDatabaseSimulation : Simulation() {
 //      ).pause(1)
 //    )
 
-  // Note we should be using a feeder here
-  // let's demonstrate how we can retry: let's make the request fail randomly and retry a given
-  // number of times
+    // Note we should be using a feeder here
+    // let's demonstrate how we can retry: let's make the request fail randomly and retry a given
+    // number of times
 //
 //  val edit =
 //    // let's try at max 2 times
@@ -66,22 +78,37 @@ class ComputerDatabaseSimulation : Simulation() {
 //      // if the chain didn't finally succeed, have the user exit the whole scenario
 //      .exitHereIfFailed()
 
-  private val httpProtocol =
-    http.baseUrl("http://teststand:8080/test-stand/")
-      .acceptHeader("*/*")
-      //.acceptLanguageHeader("en-US,en;q=0.5")
-      //.acceptEncodingHeader("gzip, deflate")
+    private val httpReactive =
+        http.baseUrl("http://reactive:8080/")
+            .acceptHeader("*/*")
+    private val httpSync =
+        http.baseUrl("http://sync:8080/test-stand/")
+            .acceptHeader("*/*")
+    //.acceptLanguageHeader("en-US,en;q=0.5")
+    //.acceptEncodingHeader("gzip, deflate")
 //      .userAgentHeader(
 //        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:16.0) Gecko/20100101 Firefox/16.0"
 //      )
 
-  val users = scenario("Users").exec(example)
-  //val admins = scenario("Admins").exec(search, browse, edit)
+    private val reactiveScenario = scenario("Reactive").exec(reactive)
+    private val syncScenario = scenario("Sync").exec(sync)
+    private val syncWarmup1 = scenario("Sync GET WarmUp").exec(sync1)
+    private val syncScen1 = scenario("Sync GET").exec(sync1)
+    private val reactWarmup1 = scenario("React GET WarmUp").exec(sync1)
+    private val reactScen1 = scenario("React GET").exec(sync1)
+    //val admins = scenario("Admins").exec(search, browse, edit)
 
-  init {
-    setUp(
-      users.injectOpen(rampUsersPerSec(3.0).to(10.0).during(60 * 14))
-      //users.injectOpen(rampUsers(60 * 2 * 22).during(60 * 2)),
-    ).protocols(httpProtocol)
-  }
+    init {
+        setUp(
+            syncWarmup1.injectOpen(rampUsersPerSec(100.0).to(101.0).during(60 * 5)).andThen(
+                syncScen1.injectOpen(rampUsersPerSec(100.0).to(600.0).during(60 * 50)).protocols(httpSync)
+            ).protocols(httpSync),
+            reactWarmup1.injectOpen(rampUsersPerSec(100.0).to(101.0).during(60 * 5)).andThen(
+                reactScen1.injectOpen(rampUsersPerSec(100.0).to(600.0).during(60 * 50)).protocols(httpReactive)
+            ).protocols(httpReactive)
+            //reactiveScenario.injectOpen(rampUsersPerSec(75.0).to(135.0).during(60 * 60)).protocols(httpReactive),
+            //syncScenario.injectOpen(rampUsersPerSec(75.0).to(135.0).during(60 * 60)).protocols(httpSync),
+            //users.injectOpen(rampUsers(60 * 2 * 22).during(60 * 2)),
+        )
+    }
 }

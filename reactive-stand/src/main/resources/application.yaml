@@ -27,13 +27,13 @@ server:
   error:
     include-stacktrace: always
     include-message: always
-  tomcat:
-    threads:
-      max: 1 #In code!!!
-      min-spare: 1 #In code!!!!
-    accept-count: 100
-    processor-cache: 1
-    max-connections: 100
+#  tomcat:
+#    threads:
+#      max: 1 #In code!!!
+#      min-spare: 1 #In code!!!!
+#    accept-count: 100
+#    processor-cache: 1
+#    max-connections: 100
 
 
 

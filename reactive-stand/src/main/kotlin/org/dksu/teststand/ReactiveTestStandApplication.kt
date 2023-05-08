@@ -3,12 +3,14 @@ package org.dksu.teststand
 import io.r2dbc.spi.ConnectionFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.boot.web.embedded.netty.NettyReactiveWebServerFactory
+import org.springframework.boot.web.server.WebServerFactoryCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.core.io.ClassPathResource
-import org.springframework.r2dbc.connection.init.CompositeDatabasePopulator
 import org.springframework.r2dbc.connection.init.ConnectionFactoryInitializer
-import org.springframework.r2dbc.connection.init.ResourceDatabasePopulator
+import org.springframework.stereotype.Component
+import java.time.Duration
+
 
 @Configuration
 class Config {
@@ -21,6 +23,14 @@ class Config {
 //		populator.addPopulators(ResourceDatabasePopulator(ClassPathResource("./sql/schema.sql")))
 //		initializer.setDatabasePopulator(populator)
 		return initializer
+	}
+}
+
+
+@Component
+class NettyWebServerFactoryPortCustomizer : WebServerFactoryCustomizer<NettyReactiveWebServerFactory> {
+	override fun customize(serverFactory: NettyReactiveWebServerFactory) {
+		//serverFactory.setLifecycleTimeout(Duration.ofMillis(3000))
 	}
 }
 

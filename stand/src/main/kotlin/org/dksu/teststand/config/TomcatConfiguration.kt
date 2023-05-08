@@ -40,11 +40,11 @@ class MyTomcatWebServerCustomizer : WebServerFactoryCustomizer<TomcatServletWebS
         factory.addConnectorCustomizers(TomcatConnectorCustomizer { connector ->
             val executor = StandardThreadExecutor(
             ).apply {
-                maxQueueSize = 17
+                //maxQueueSize = 1
                 name = "myTomcatThreadPool"
                 namePrefix = "my-"
-                maxThreads = 1
-                minSpareThreads = 1
+                maxThreads = 200
+                minSpareThreads = 200
             }
             connector.service.addExecutor(executor)
 

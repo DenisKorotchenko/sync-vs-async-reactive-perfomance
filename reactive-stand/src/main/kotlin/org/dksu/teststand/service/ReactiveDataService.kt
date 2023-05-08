@@ -1,17 +1,19 @@
 package org.dksu.teststand.service
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.count
 import mu.KLogging
 import org.dksu.teststand.entity.DataEntity
-import org.dksu.teststand.repository.DataRepository
+import org.dksu.teststand.repository.ReactiveDataRepository
 import org.springframework.stereotype.Service
 import java.util.Random
 import java.util.UUID
 
-const val MAX_STATE = 100L
+//const val MAX_STATE = 100L
 
 @Service
-class DataService(
-    private val dataRepository: DataRepository
+class ReactiveDataService(
+    private val dataRepository: ReactiveDataRepository
 ): KLogging() {
     private val random = Random()
 
@@ -23,7 +25,7 @@ class DataService(
         return str
     }
 
-    fun addRandomData(count: Int, maxState: Long? = null): Int {
+    suspend fun addRandomData(count: Int, maxState: Long? = null): Int {
         val data = (0 until count).map {
             DataEntity(
                 uuid = UUID.randomUUID().toString(),
@@ -32,11 +34,11 @@ class DataService(
             )
         }
         logger.info("Data created")
-        return dataRepository.saveAll(data).size
+        return dataRepository.saveAll(data).count()
     }
 
-    fun getWithRandomState(): Iterable<DataEntity> {
-        val state = random.nextLong(100);
-        return dataRepository.findAllByState(state);
+    fun getWithRandomState(): Flow<DataEntity> {
+        val state = random.nextLong(100)
+        return dataRepository.findAllByState(state)
     }
 }

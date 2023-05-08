@@ -51,10 +51,9 @@ class Runner {
 
         val gatlingContainer = GatlingContainer()
         gatlingContainer.withFileSystemBind("build/reports/", "/home/gradle/project/build/reports/", BindMode.READ_WRITE)
-        //gatlingContainer.start()
-//        println("Gatling started")
-        //gatlingContainer.copyFileFromContainer("/home/gradle/project/build/reports/", "reports/")
-        Thread.sleep(1000 * 3000)
+        gatlingContainer.start()
+        println("Gatling started")
+        Thread.sleep(1000 * 6000)
         
         //gatlingContainer.copyFileFromContainer("/home/gradle/project/build/reports/", "reports/")
     }

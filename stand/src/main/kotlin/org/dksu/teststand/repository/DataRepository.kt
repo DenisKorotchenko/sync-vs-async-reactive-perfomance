@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository
 interface DataRepository: JpaRepository<DataEntity, Long> {
     fun findAllByStateBetween(from: Long, to: Long): List<DataEntity>
     fun findAllByStateBetweenOrderByUuid(from: Long, to: Long): List<DataEntity>
-    fun findALlByState(state: Long): List<DataEntity>
+    fun findAllByState(state: Long): List<DataEntity>
 }

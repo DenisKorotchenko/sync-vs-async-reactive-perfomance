@@ -1,6 +1,7 @@
 CREATE
 OR REPLACE PROCEDURE add_random_rows(
-    rows_number INT
+    rows_number INT,
+    max_state REAL
 ) AS
 $$
 BEGIN
@@ -13,7 +14,7 @@ VALUES (md5(random()::TEXT)::UUID,
                          FROM generate_series(
                                  1,
                                  CEIL(100 / 32.)::integer)), 1, 100)),
-        floor((100. * random())::INTEGER));
+        floor((max_state * random())::INTEGER));
 END LOOP;
 END;
 $$

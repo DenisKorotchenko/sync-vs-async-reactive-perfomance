@@ -59,7 +59,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
 	implementation("io.r2dbc", "r2dbc-spi", "1.0.0.RELEASE")
 	implementation("io.r2dbc", "r2dbc-postgresql", "0.8.13.RELEASE")
-
+	implementation("io.r2dbc", "r2dbc-pool", "0.8.13.RELEASE")
+	implementation("org.springframework.boot.experimental", "spring-boot-autoconfigure-r2dbc", "0.1.0.M1")
 
 }
 
