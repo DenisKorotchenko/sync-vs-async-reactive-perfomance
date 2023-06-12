@@ -1,18 +1,19 @@
 package org.dksu.teststand.service
 
+import io.micrometer.prometheus.PrometheusMeterRegistry
 import mu.KLogging
 import org.dksu.teststand.entity.DataEntity
 import org.dksu.teststand.repository.DataRepository
 import org.springframework.stereotype.Service
-import java.util.Random
-import java.util.UUID
+import java.util.*
 
 const val MAX_STATE = 100L
 
 @Service
 class DataService(
-    private val dataRepository: DataRepository
-): KLogging() {
+    private val dataRepository: DataRepository,
+    private val meterRegistry: PrometheusMeterRegistry,
+) : KLogging() {
     private val random = Random()
 
     fun randomText(maxLength: Long = 50): String {
@@ -36,7 +37,27 @@ class DataService(
     }
 
     fun getWithRandomState(): Iterable<DataEntity> {
-        val state = random.nextLong(100);
-        return dataRepository.findAllByState(state);
+        val state = random.nextLong(100)
+        return dataRepository.findAllByState(state)
+    }
+
+    fun getWithProcessing(): Iterable<Int> {
+        val data = meterRegistry.timer("db").recordCallable {
+            getWithRandomState()
+        }!!
+        return meterRegistry.timer("logic").recordCallable {
+            data.map {
+                var ans = 0
+                for (s0 in it.txt) {
+                    for (s1 in it.txt) {
+                        for (s2 in it.txt) {
+                            if (s0 == s1 && s1 == s2)
+                                ans++
+                        }
+                    }
+                }
+                ans
+            }
+        }!!
     }
 }

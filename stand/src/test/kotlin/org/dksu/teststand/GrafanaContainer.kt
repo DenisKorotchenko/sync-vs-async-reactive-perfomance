@@ -5,12 +5,11 @@ import mu.KotlinLogging
 import org.testcontainers.containers.BindMode
 
 import java.net.URI
-import java.net.URL
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
-class GrafanaContainer: GenericContainerWithFixedPort<GrafanaContainer>(
+class GrafanaContainer : GenericContainerWithFixedPort<GrafanaContainer>(
     "grafana/grafana"
 ) {
     companion object {
@@ -18,7 +17,7 @@ class GrafanaContainer: GenericContainerWithFixedPort<GrafanaContainer>(
     }
 
     init {
-        withNetwork(myNetwork)
+        withNetwork(testStandNetwork)
         withNetworkAliases("grafana")
         withExposedPorts(3000)
         withEnv("GF_SERVER_DOMAIN", "localhost")
@@ -36,7 +35,7 @@ class GrafanaContainer: GenericContainerWithFixedPort<GrafanaContainer>(
 
     fun startContainer(): GrafanaContainer {
         super.start()
-        return this;
+        return this
     }
 
     fun getUrl() = "http://localhost:${firstMappedPort}"

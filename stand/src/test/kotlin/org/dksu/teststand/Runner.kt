@@ -12,11 +12,11 @@ import kotlin.concurrent.thread
 
 class Runner {
     fun run() {
-        val syncPostgreSQLContainer = PostgreSQLContainer("postgres:11").withNetwork(myNetwork)
+        val syncPostgreSQLContainer = PostgreSQLContainer("postgres:11").withNetwork(testStandNetwork)
             .withNetworkAliases("sync-db")
             .withExposedPorts(5432)
         syncPostgreSQLContainer.start()
-        val reactivePostgreSQLContainer = PostgreSQLContainer("postgres:11").withNetwork(myNetwork)
+        val reactivePostgreSQLContainer = PostgreSQLContainer("postgres:11").withNetwork(testStandNetwork)
             .withNetworkAliases("reactive-db")
             .withExposedPorts(5432)
         reactivePostgreSQLContainer.start()
@@ -28,8 +28,6 @@ class Runner {
         val reactiveTestStandContainer = ReactiveTestStandContainer()
             .withEnv("SPRING_R2DBC_URL", "r2dbc:postgresql://reactive-db:5432/test")
             .withEnv("SPRING_LIQUIBASE_URL", "jdbc:postgresql://reactive-db:5432/test")
-            //.withEnv("SPRING_LIQUIBASE_ENABLED", "false")
-            //.withEnv("SPRING_DATASOURCE_DRIVER-CLASS-NAME", "org.postgresql.Driver")
         reactiveTestStandContainer.start()
         val prometheusContainer = PrometheusContainer()
         prometheusContainer.start()
@@ -50,12 +48,15 @@ class Runner {
         println()
 
         val gatlingContainer = GatlingContainer()
-        gatlingContainer.withFileSystemBind("build/reports/", "/home/gradle/project/build/reports/", BindMode.READ_WRITE)
+        gatlingContainer.withFileSystemBind("C:/Users/Honor Magicbook/.m2", "/home/gradle/project/.m2")
+        gatlingContainer.withFileSystemBind(
+            "build/reports/",
+            "/home/gradle/project/build/reports/",
+            BindMode.READ_WRITE
+        )
         gatlingContainer.start()
         println("Gatling started")
         Thread.sleep(1000 * 6000)
-        
-        //gatlingContainer.copyFileFromContainer("/home/gradle/project/build/reports/", "reports/")
     }
 }
 
@@ -67,11 +68,10 @@ fun main() {
 
     val logger = KLogging().logger
 
-    //Thread.sleep(5000);
     repeat(20) {
         thread {
             try {
-                val httpClient = HttpClient.newBuilder().connectTimeout(Duration.ofMillis(100)).build();
+                val httpClient = HttpClient.newBuilder().connectTimeout(Duration.ofMillis(100)).build()
 
                 val response = httpClient.send(request, BodyHandlers.ofString())
                 println(response.statusCode())
@@ -82,11 +82,11 @@ fun main() {
         }
     }
 
-    Thread.sleep(10000);
+    Thread.sleep(10000)
     repeat(20) {
         thread {
             try {
-                val httpClient = HttpClient.newBuilder().connectTimeout(Duration.ofMillis(100)).build();
+                val httpClient = HttpClient.newBuilder().connectTimeout(Duration.ofMillis(100)).build()
 
                 val response = httpClient.send(request, BodyHandlers.ofString())
                 println(response.statusCode())

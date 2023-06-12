@@ -1,10 +1,6 @@
 package org.dksu.teststand.config
 
-import org.apache.catalina.Executor
-import org.apache.catalina.connector.Request
-import org.apache.catalina.connector.Response
 import org.apache.catalina.core.StandardThreadExecutor
-import org.apache.catalina.valves.SemaphoreValve
 import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory
 import org.springframework.boot.web.server.WebServerFactoryCustomizer
@@ -26,25 +22,14 @@ import org.springframework.stereotype.Component
 @Component
 class MyTomcatWebServerCustomizer : WebServerFactoryCustomizer<TomcatServletWebServerFactory> {
     override fun customize(factory: TomcatServletWebServerFactory) {
-//        factory.addContextValves(
-//            object : SemaphoreValve(){
-//                override fun permitDenied(request: Request?, response: Response?) {
-//                    println("!!!!")
-//                    super.permitDenied(request, response)
-//                    throw RuntimeException()
-//                }
-//            }.apply {
-//                concurrency = 1
-//            }
-//        )
         factory.addConnectorCustomizers(TomcatConnectorCustomizer { connector ->
             val executor = StandardThreadExecutor(
             ).apply {
-                //maxQueueSize = 1
+                maxQueueSize = 10
                 name = "myTomcatThreadPool"
                 namePrefix = "my-"
-                maxThreads = 200
-                minSpareThreads = 200
+                maxThreads = 3
+                minSpareThreads = 3
             }
             connector.service.addExecutor(executor)
 

@@ -24,4 +24,8 @@ class DataController(
     @GetMapping("getRandom")
     fun getWithRandomState(): Iterable<DataEntity> =
         dataService.getWithRandomState()
+
+    @GetMapping("getRandomProcessing")
+    fun getRandomProcessing(): Iterable<Int> =
+        dataService.getWithProcessing()
 }

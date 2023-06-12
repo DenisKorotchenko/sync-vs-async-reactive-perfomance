@@ -3,17 +3,14 @@ spring:
     name: test-stand
   datasource:
     url: jdbc:tc:postgresql:11:///test
-    #driver-class-name: #org.postgresql.Driver #org.testcontainers.jdbc.ContainerDatabaseDriver
     username: test
     password: test
+    hikari:
+      maximum-pool-size: 100
   r2dbc:
     url: r2dbc:tc:postgresql:11:///test
     username: test
     password: test
-  #jpa:
-  #  generate-ddl: true
-  #  hibernate:
-  #    ddl-auto: create-drop
   liquibase:
     change-log: classpath:/database/changelog.yaml
 
@@ -41,7 +38,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: 'info, health, prometheus'#metrics, prometheus, heapdump, scheduledtasks, logfile, loggers, mappings'
+        include: 'info, health, prometheus'
   metrics:
     export:
       prometheus:

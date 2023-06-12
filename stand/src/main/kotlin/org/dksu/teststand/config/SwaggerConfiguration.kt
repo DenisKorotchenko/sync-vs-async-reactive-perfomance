@@ -12,6 +12,5 @@ class SwaggerConfiguration {
         .info(
             Info()
                 .title("Test Stand")
-                .description("Test Stand Calculation")
         )
 }

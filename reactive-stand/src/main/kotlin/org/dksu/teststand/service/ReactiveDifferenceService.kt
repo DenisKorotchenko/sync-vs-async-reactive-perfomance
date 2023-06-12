@@ -39,30 +39,10 @@ class ReactiveDifferenceService(
 
     suspend fun getDifferenceFromTo(fromState: Long, toState: Long, numberOfCompareRows: Long): Int {
         val d = Random.nextInt(50)
-        val betweenRows = //meterRegistry.timer("db").recordCallable {
-            dataRepository.findAllByStateBetween(fromState + d, toState + d)
-        //}
+        val betweenRows = dataRepository.findAllByStateBetween(fromState + d, toState + d)
 
-//        val ans = meterRegistry.timer("logic").recordCallable {
         val ans = sortByTxt(betweenRows)
-//            val rows = mutableSetOf<Long>()
-//            val randomRows = mutableListOf<DataEntity>()
-//            for (i in 0 until numberOfCompareRows) {
-//                val row = (0 until MAX_STATE).random()
-//                if (row !in rows) {
-//                    rows.add(row)
-//                    randomRows += dataRepository.findALlByState(row)
-//                }
-//            }
-//
-//            // TODO(Compare here, please)
-//            countDifference(betweenRows!!, randomRows).size
-//        }
 
-        meterRegistry.timer("external").record {
-            // TODO: Reactive
-            //externalServiceEmulator.call()
-        }
         return ans.size
     }
 }

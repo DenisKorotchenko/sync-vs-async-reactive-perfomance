@@ -1682,11 +1682,11 @@
               "type": "prometheus",
               "uid": "${DS_PROMETHEUS}"
             },
-            "expr": "avg_over_time(process_cpu_usage{application=\"$application\", instance=\"$instance\"}[5m])",
+            "expr": "avg_over_time(process_cpu_usage{application=\"$application\", instance=\"$instance\"}[1m])",
             "format": "time_series",
             "hide": false,
             "intervalFactor": 1,
-            "legendFormat": "process-5m",
+            "legendFormat": "process-1m",
             "refId": "C"
           }
         ],

@@ -6,7 +6,7 @@ import org.springframework.data.relational.core.mapping.Table
 
 @Table("data")
 open class DataEntity(
-    @Id //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     @Column("id")
     open var id: Long? = null,
 

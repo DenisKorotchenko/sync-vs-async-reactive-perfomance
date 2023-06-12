@@ -1,6 +1,5 @@
 package org.dksu.teststand.service
 
-import io.micrometer.core.annotation.Timed
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import org.dksu.teststand.entity.DataEntity
 import org.dksu.teststand.repository.DataRepository
@@ -36,22 +35,10 @@ class DifferenceService(
 
         val ans = meterRegistry.timer("logic").recordCallable {
             sortByTxt(betweenRows ?: emptyList())
-//            val rows = mutableSetOf<Long>()
-//            val randomRows = mutableListOf<DataEntity>()
-//            for (i in 0 until numberOfCompareRows) {
-//                val row = (0 until MAX_STATE).random()
-//                if (row !in rows) {
-//                    rows.add(row)
-//                    randomRows += dataRepository.findALlByState(row)
-//                }
-//            }
-//
-//            // TODO(Compare here, please)
-//            countDifference(betweenRows!!, randomRows).size
         }
 
         meterRegistry.timer("external").record {
-            //externalServiceEmulator.call()
+            //externalService.call()
         }
         return ans?.size ?: 0
     }

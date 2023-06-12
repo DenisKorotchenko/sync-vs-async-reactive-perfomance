@@ -5,10 +5,9 @@ import org.testcontainers.containers.GenericContainer
 
 class ReactiveTestStandContainer() : GenericContainer<ReactiveTestStandContainer>("reactive-teststand") {
     init {
-        withNetwork(myNetwork)
+        withNetwork(testStandNetwork)
         withNetworkAliases("reactive")
         withExposedPorts(8080, 8081)
-        //withEnv("TESTCONTAINERS_RYUK_DISABLED", "true")
         withFileSystemBind(
             "//var/run/docker.sock",
             "/var/run/docker.sock",

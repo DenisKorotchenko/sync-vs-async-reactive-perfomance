@@ -6,7 +6,7 @@ import org.testcontainers.containers.GenericContainer
 class PrometheusContainer: GenericContainer<PrometheusContainer>("prom/prometheus") {
     init {
         withPrivilegedMode(true)
-        withNetwork(myNetwork)
+        withNetwork(testStandNetwork)
         withNetworkAliases("prometheus")
         withExposedPorts(9090)
         withClasspathResourceMapping("prometheus.yml", "/etc/prometheus/prometheus.yml", BindMode.READ_ONLY)
